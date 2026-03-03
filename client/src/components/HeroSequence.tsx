@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { useTransform, useMotionValueEvent, type MotionValue } from "framer-motion";
 
-const frameCount = 15;
+const frameCount = 80;
 const frames = Array.from({ length: frameCount }, (_, i) =>
-    `/burger_seq/ezgif-frame-${String(i + 1).padStart(3, "0")}.jpg`
+    `/hero_seq/Fruits_falling_out_of_bowl_delpmaspu__${String(i).padStart(3, "0")}.jpg`
 );
 
-interface BurgerSequenceProps {
+interface HeroSequenceProps {
     className?: string;
     progress: MotionValue<number>;
 }
 
-export function BurgerSequence({ className, progress }: BurgerSequenceProps) {
+export function HeroSequence({ className, progress }: HeroSequenceProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [images, setImages] = useState<HTMLImageElement[]>([]);
     const [loaded, setLoaded] = useState(false);

@@ -1,10 +1,10 @@
 import { useRef, useState, useEffect } from "react";
 import { Link } from "wouter";
-import { ArrowRight, Star, Clock, Truck, ShieldCheck, Quote, Tag, Gift, CheckCircle, Zap, Leaf, Flame, Timer, PlayCircle, TrendingUp } from "lucide-react";
+import { ArrowRight, Star, Clock, Truck, ShieldCheck, Quote, Tag, Gift, CheckCircle, Zap, Leaf, Flame, Timer, PlayCircle, TrendingUp, Moon, Sun } from "lucide-react";
 import { motion, useScroll, useSpring, useTransform, AnimatePresence } from "framer-motion";
 import { useMenu } from "@/hooks/use-menu";
 import { MenuCard } from "@/components/MenuCard";
-import { BurgerSequence } from "@/components/BurgerSequence";
+import { HeroSequence } from "@/components/HeroSequence";
 
 const subscriptionPlans = [
   {
@@ -84,6 +84,8 @@ export default function Home() {
   const { data: menuItems } = useMenu();
   const featuredItems = menuItems?.filter(item => item.popular).slice(0, 3) || [];
 
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
   // Scrollytelling Refs
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -99,8 +101,22 @@ export default function Home() {
   });
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className={`flex flex-col min-h-screen transition-colors duration-500 ${isDarkMode ? "bg-slate-950 text-slate-50" : "bg-white text-slate-900"}`}>
       <LiveOrderNotification />
+
+      {/* Theme Toggle */}
+      <div className="fixed bottom-6 left-6 z-50">
+        <button
+          onClick={() => setIsDarkMode(!isDarkMode)}
+          className={`p-3 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110 active:scale-95 ${isDarkMode
+            ? "bg-slate-800 text-yellow-400 hover:bg-slate-700 hover:shadow-yellow-400/20"
+            : "bg-white text-slate-800 hover:bg-slate-50 border border-slate-200"
+            }`}
+          title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+        >
+          {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+        </button>
+      </div>
       <div className="fixed bottom-6 right-6 z-50 group">
         <motion.button
           whileHover={{ scale: 1.1, rotate: 12 }}
@@ -121,22 +137,15 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Scroll Sequence Wrapper: Height reduced to 200vh for 2x playback speed (less 'slomo') */}
-      <div ref={containerRef} className="relative h-[200vh]">
+      {/* Scroll Sequence Wrapper: Height increased to 400vh to slow down the animation significantly */}
+      <div ref={containerRef} className="relative h-[400vh]">
 
         {/* Sticky Hero Section: Stays pinned while user scrolls */}
         <section className="sticky top-0 h-[100dvh] flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 z-0">
-            {/* Added contrast/saturation to simulate 'upscaling' and clearer visuals */}
-            <BurgerSequence progress={smoothProgress} className="w-full h-full object-cover contrast-110 brightness-105 saturate-110" />
+            <HeroSequence progress={smoothProgress} className="w-full h-full object-cover" />
 
-            {/* Cinematic Gradient: Darkens the left side to make text readable, keeps right side clear for the burger */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent z-10" />
-
-            {/* Vignette Effect: Darkens the corners to focus attention on the center */}
-            <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.6)_100%)] pointer-events-none" />
-
-            {/* Minimal gradient at the very bottom for content transition */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent z-10" />
             <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/60 to-transparent z-10" />
           </div>
 
@@ -147,34 +156,41 @@ export default function Home() {
               transition={{ duration: 0.8, ease: "easeOut" }}
               className="space-y-6 md:space-y-8 max-w-2xl pt-20 md:pt-0"
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-white/10 text-white border border-white/20 backdrop-blur-md shadow-lg">
-                <span className="relative flex h-2.5 w-2.5 md:h-3 md:w-3">
+              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-black/40 text-white border border-white/10 backdrop-blur-md shadow-2xl">
+                <span className="relative flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 md:h-3 md:w-3 bg-green-500"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
                 </span>
-                <span className="text-xs md:text-sm font-semibold tracking-wide uppercase text-shadow-sm">COMING SOON</span>
+                <span className="text-sm font-medium tracking-widest uppercase text-shadow-sm">Now Taking Pre-Orders</span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-medium font-display leading-tight tracking-tight text-white drop-shadow-xl shadow-black/50">
-                Exquisite <span className="text-primary italic">Flavors</span> <br />
-                Delivered to You
+              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold font-display leading-[1.1] tracking-tight text-white drop-shadow-2xl">
+                The Art of <br />
+                <span className="text-primary font-serif italic font-light">Fine Dining</span> <br />
+                At Home
               </h1>
 
-              <p className="text-lg md:text-xl text-slate-100 max-w-lg leading-relaxed font-light tracking-wide drop-shadow-md">
-                Experience culinary excellence at your doorstep. Premium ingredients, expert chefs, and swift delivery combine to bring you an unforgettable dining experience.
+              <p className="text-lg md:text-xl text-slate-200 max-w-xl leading-relaxed font-light tracking-wide drop-shadow-lg">
+                Transform your daily meals into extraordinary culinary experiences. Curated ingredients, masterchef recipes, and a commitment to absolute perfection, delivered directly to your table.
               </p>
 
-              <div className="flex flex-wrap gap-4 pt-4">
-                <a href="#plans">
-                  <button className="px-6 py-3 md:px-8 md:py-4 bg-primary text-primary-foreground rounded-full font-bold text-base md:text-lg shadow-xl shadow-primary/25 hover:shadow-2xl hover:shadow-primary/40 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto">
-                    Explore Plans <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
+              <div className="flex flex-col sm:flex-row gap-4 pt-6">
+                <a href="#plans" className="w-full sm:w-auto">
+                  <button className="px-8 py-4 bg-primary text-primary-foreground rounded-full font-bold text-lg shadow-xl shadow-primary/25 hover:shadow-2xl hover:shadow-primary/40 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2 w-full">
+                    Explore Plans <ArrowRight className="w-5 h-5" />
                   </button>
                 </a>
-                <Link href="/reviews">
-                  <button className="px-6 py-3 md:px-8 md:py-4 bg-white/10 text-white border border-white/20 backdrop-blur-sm rounded-full font-bold text-base md:text-lg hover:bg-white/20 transition-all duration-300 shadow-sm w-full sm:w-auto">
+                <Link href="/reviews" className="w-full sm:w-auto">
+                  <button className="px-8 py-4 bg-white/10 text-white border border-white/20 backdrop-blur-sm rounded-full font-bold text-lg hover:bg-white/20 hover:-translate-y-1 transition-all duration-300 shadow-sm w-full">
                     Read Reviews
                   </button>
                 </Link>
+              </div>
+
+              <div className="pt-6 flex flex-wrap items-center gap-6 text-sm font-medium text-slate-300">
+                <div className="flex items-center gap-2 bg-black/30 px-3 py-1.5 rounded-lg backdrop-blur-sm"><Star className="w-5 h-5 text-yellow-500 fill-yellow-500" /> <span className="text-white">4.9/5</span> Rating</div>
+                <div className="flex items-center gap-2 bg-black/30 px-3 py-1.5 rounded-lg backdrop-blur-sm"><ShieldCheck className="w-5 h-5 text-emerald-400" /> <span className="text-white">100% Organic</span></div>
+                <div className="flex items-center gap-2 bg-black/30 px-3 py-1.5 rounded-lg backdrop-blur-sm"><Timer className="w-5 h-5 text-orange-400" /> <span className="text-white">30 Min</span> Delivery</div>
               </div>
             </motion.div>
           </div>
@@ -183,23 +199,47 @@ export default function Home() {
 
       {/* Infinite Marquee Strip */}
       <div className="bg-primary py-3 overflow-hidden select-none relative z-20 shadow-md border-b border-primary/20">
-        <div className="flex w-max animate-marquee gap-12 whitespace-nowrap">
+        <div className="flex w-max animate-marquee gap-8 whitespace-nowrap">
           {[...Array(10)].map((_, i) => (
             <div key={i} className="flex items-center gap-8 text-white/90 font-bold text-xs md:text-sm tracking-widest uppercase">
-              <span className="flex items-center gap-2"><Zap className="w-4 h-4 text-yellow-300 fill-yellow-300" /> Flash Sale: 50% OFF Burgers</span>
+              <span className="flex items-center gap-2"><Zap className="w-4 h-4 text-yellow-300 fill-yellow-300" /> Flash Sale: 20% OFF Subscriptions</span>
               <span className="text-white/20">•</span>
-              <span className="flex items-center gap-2"><TrendingUp className="w-4 h-4" /> Trending: Spicy Momos</span>
-              <span className="text-white/20">•</span>
-              <span className="flex items-center gap-2"><Clock className="w-4 h-4" /> 28 Min Delivery</span>
+              {featuredItems.length > 0 ? (
+                featuredItems.map((item, idx) => (
+                  <span key={`feat-${i}-${idx}`} className="flex items-center gap-8">
+                    <span className="flex items-center gap-2"><TrendingUp className="w-4 h-4 text-emerald-300" /> Trending: {item.name}</span>
+                    <span className="text-white/20">•</span>
+                  </span>
+                ))
+              ) : (
+                <>
+                  <span className="flex items-center gap-2"><TrendingUp className="w-4 h-4" /> Trending: Spicy Momos</span>
+                  <span className="text-white/20">•</span>
+                </>
+              )}
+              <span className="flex items-center gap-2"><Clock className="w-4 h-4" /> Priority Delivery</span>
               <span className="text-white/20">•</span>
             </div>
           ))}
-          {/* Duplicate for infinite loop illusion (basic css animation required in tailwind config, but manual duplication helps) */}
+          {/* Duplicate for infinite loop illusion */}
           {[...Array(10)].map((_, i) => (
             <div key={`dup-${i}`} className="flex items-center gap-8 text-white/90 font-bold text-xs md:text-sm tracking-widest uppercase">
-              <span className="flex items-center gap-2"><Zap className="w-4 h-4 text-yellow-300 fill-yellow-300" /> Flash Sale: 50% OFF Burgers</span>
+              <span className="flex items-center gap-2"><Zap className="w-4 h-4 text-yellow-300 fill-yellow-300" /> Flash Sale: 20% OFF Subscriptions</span>
               <span className="text-white/20">•</span>
-              <span className="flex items-center gap-2"><TrendingUp className="w-4 h-4" /> Trending: Spicy Momos</span>
+              {featuredItems.length > 0 ? (
+                featuredItems.map((item, idx) => (
+                  <span key={`dup-feat-${i}-${idx}`} className="flex items-center gap-8">
+                    <span className="flex items-center gap-2"><TrendingUp className="w-4 h-4 text-emerald-300" /> Trending: {item.name}</span>
+                    <span className="text-white/20">•</span>
+                  </span>
+                ))
+              ) : (
+                <>
+                  <span className="flex items-center gap-2"><TrendingUp className="w-4 h-4" /> Trending: Spicy Momos</span>
+                  <span className="text-white/20">•</span>
+                </>
+              )}
+              <span className="flex items-center gap-2"><Clock className="w-4 h-4" /> Priority Delivery</span>
               <span className="text-white/20">•</span>
             </div>
           ))}
@@ -207,7 +247,7 @@ export default function Home() {
       </div>
 
       {/* Quick Categories & Stories Section */}
-      <section className="py-12 bg-white relative z-20 rounded-b-3xl shadow-sm">
+      <section className={`py-12 relative z-20 rounded-b-3xl shadow-sm transition-colors duration-500 ${isDarkMode ? "bg-slate-900" : "bg-white"}`}>
         <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Story Highlights */}
@@ -238,17 +278,17 @@ export default function Home() {
             </div>
           </div>
 
-          <h3 className="text-xl font-bold font-display mb-6 px-2 flex items-center gap-2">
+          <h3 className={`text-xl font-bold font-display mb-6 px-2 flex items-center gap-2 ${isDarkMode ? "text-white" : "text-slate-900"}`}>
             <Zap className="w-5 h-5 text-yellow-500 fill-yellow-500" /> Quick Cravings
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {categories.map((cat) => (
-              <div key={cat.id} className="group cursor-pointer bg-slate-50 border border-slate-100 hover:border-primary/50 hover:bg-white hover:shadow-lg transition-all p-4 rounded-xl flex items-center gap-4">
+              <div key={cat.id} className={`group cursor-pointer border hover:border-primary/50 hover:shadow-lg transition-all p-4 rounded-xl flex items-center gap-4 ${isDarkMode ? "bg-slate-800 border-slate-700 hover:bg-slate-700" : "bg-slate-50 border-slate-100 hover:bg-white"}`}>
                 <div className={`w-12 h-12 rounded-full ${cat.color} flex items-center justify-center text-2xl shadow-sm group-hover:scale-110 transition-transform`}>
                   {cat.icon}
                 </div>
                 <div>
-                  <div className="font-bold text-slate-800 group-hover:text-primary transition-colors">{cat.name}</div>
+                  <div className={`font-bold transition-colors group-hover:text-primary ${isDarkMode ? "text-white" : "text-slate-800"}`}>{cat.name}</div>
                   <div className="text-xs text-slate-400 font-medium whitespace-nowrap">Order Now</div>
                 </div>
                 <ArrowRight className="w-4 h-4 text-slate-300 ml-auto group-hover:text-primary transition-colors" />
@@ -259,15 +299,15 @@ export default function Home() {
       </section>
 
       {/* Bestsellers You'll Love */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      <section className={`py-24 relative overflow-hidden transition-colors duration-500 ${isDarkMode ? "bg-slate-950" : "bg-white"}`}>
         {/* Background Decorative Elements */}
         <div className="absolute top-20 left-10 opacity-5 animate-pulse"><Leaf className="w-32 h-32 rotate-45" /></div>
         <div className="absolute bottom-20 right-10 opacity-5 animate-bounce duration-[3000ms]"><Flame className="w-24 h-24 text-orange-500" /></div>
 
         <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-10 md:mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold font-display mb-4 text-slate-900">Bestsellers You'll Love</h2>
-            <p className="text-slate-500 max-w-2xl mx-auto">
+            <h2 className={`text-3xl md:text-4xl font-bold font-display mb-4 ${isDarkMode ? "text-white" : "text-slate-900"}`}>Bestsellers You'll Love</h2>
+            <p className={`max-w-2xl mx-auto ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>
               Discover our most loved dishes, crafted with passion and delivered with care.
             </p>
           </div>
@@ -289,18 +329,18 @@ export default function Home() {
       </section>
 
       {/* Aesthetic Survey Section */}
-      <section className="py-20 relative overflow-hidden bg-slate-50">
+      <section className={`py-20 relative overflow-hidden ${isDarkMode ? "bg-slate-900" : "bg-slate-50"}`}>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[800px] md:h-[800px] bg-primary/10 rounded-full blur-3xl saturate-150 animate-pulse pointer-events-none"></div>
         <div className="absolute top-0 right-0 w-64 h-64 bg-orange-400/10 rounded-full blur-3xl pointer-events-none"></div>
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-yellow-400/10 rounded-full blur-3xl pointer-events-none"></div>
 
         <div className="container max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="bg-white/70 backdrop-blur-2xl border border-white p-8 md:p-14 rounded-[2.5rem] shadow-2xl shadow-primary/5 text-center flex flex-col items-center transform hover:-translate-y-1 transition-transform duration-500">
+          <div className={`backdrop-blur-2xl border p-8 md:p-14 rounded-[2.5rem] shadow-2xl shadow-primary/5 text-center flex flex-col items-center transform hover:-translate-y-1 transition-transform duration-500 ${isDarkMode ? "bg-slate-800/80 border-slate-700" : "bg-white/70 border-white"}`}>
             <span className="text-4xl mb-4 bg-primary/10 p-4 rounded-full">✨</span>
-            <h2 className="text-3xl md:text-5xl font-display font-bold text-slate-900 mb-4 leading-tight">
+            <h2 className={`text-3xl md:text-5xl font-display font-bold mb-4 leading-tight ${isDarkMode ? "text-white" : "text-slate-900"}`}>
               Help Us Create The <br /><span className="text-primary italic">Perfect Menu</span>
             </h2>
-            <p className="text-slate-600 max-w-xl mx-auto mb-8 md:text-lg">
+            <p className={`max-w-xl mx-auto mb-8 md:text-lg ${isDarkMode ? "text-slate-300" : "text-slate-600"}`}>
               We are constantly evolving to serve you better. Take our 1-minute survey and help shape the future of AuraBite. Your feedback is our secret ingredient!
             </p>
             <a href="https://forms.gle/ecSNRegkMPqJrfZNA" target="_blank" rel="noopener noreferrer">
@@ -313,12 +353,12 @@ export default function Home() {
       </section>
 
       {/* Subscription Plans */}
-      <section id="plans" className="py-16 bg-secondary border-y border-stone-100">
+      <section id="plans" className={`py-16 border-y ${isDarkMode ? "bg-slate-950 border-slate-800" : "bg-secondary border-stone-100"}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-3xl font-bold font-display text-slate-900">Subscription Plans</h2>
-              <p className="text-slate-500 mt-1">Monthly meal plans tailored for you</p>
+              <h2 className={`text-3xl font-bold font-display ${isDarkMode ? "text-white" : "text-slate-900"}`}>Subscription Plans</h2>
+              <p className={`mt-1 ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>Monthly meal plans tailored for you</p>
             </div>
             <Link href="/subscriptions">
               <button className="text-primary font-bold text-sm flex items-center gap-1 hover:underline">
@@ -332,7 +372,7 @@ export default function Home() {
               {subscriptionPlans.map((plan) => (
                 <div
                   key={plan.id}
-                  className={`bg-white rounded-xl md:rounded-2xl p-4 md:p-6 border transition-all relative border-slate-200 flex flex-row md:flex-col justify-between items-center md:items-start`}
+                  className={`rounded-xl md:rounded-2xl p-4 md:p-6 border transition-all relative flex flex-row md:flex-col justify-between items-center md:items-start ${isDarkMode ? "bg-slate-800 border-slate-700" : "bg-white border-slate-200"}`}
                 >
                   {plan.popular && (
                     <div className="absolute top-0 right-0 md:-top-3 md:left-1/2 md:-translate-x-1/2 md:right-auto bg-primary/50 text-white text-[9px] md:text-xs font-bold px-2 py-1 md:px-3 md:py-1 rounded-bl-lg md:rounded-bl-none md:rounded-full">
@@ -341,16 +381,16 @@ export default function Home() {
                   )}
 
                   <div className="flex flex-col flex-1">
-                    <h4 className="font-bold text-slate-900 mb-1 text-sm md:text-lg">{plan.name}</h4>
+                    <h4 className={`font-bold mb-1 text-sm md:text-lg ${isDarkMode ? "text-white" : "text-slate-900"}`}>{plan.name}</h4>
                     <div className="hidden md:flex items-baseline gap-1 mb-3 opacity-50">
                       <span className="text-2xl font-bold text-primary">₹{plan.price.toLocaleString()}</span>
-                      <span className="text-slate-500 text-sm">/{plan.period}</span>
+                      <span className={`text-sm ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>/{plan.period}</span>
                     </div>
                     <div className="flex flex-wrap gap-1 md:gap-2 mb-0 md:mb-4 opacity-75 mt-0.5">
                       {plan.meals.map((meal) => (
                         <span
                           key={meal}
-                          className="px-1.5 py-0.5 md:px-2 md:py-1 bg-slate-100 rounded text-[9px] md:text-xs font-medium text-slate-600"
+                          className={`px-1.5 py-0.5 md:px-2 md:py-1 rounded text-[9px] md:text-xs font-medium ${isDarkMode ? "bg-slate-700 text-slate-300" : "bg-slate-100 text-slate-600"}`}
                         >
                           {meal}
                         </span>
@@ -362,7 +402,7 @@ export default function Home() {
                     <div className="flex md:hidden items-baseline gap-1 opacity-50">
                       <span className="text-base font-bold text-primary">₹{plan.price.toLocaleString()}</span>
                     </div>
-                    <button disabled className="px-3 md:px-0 md:w-full py-1.5 md:py-2.5 rounded-lg md:rounded-xl bg-slate-200 text-slate-500 font-semibold text-[10px] md:text-sm mt-1 md:mt-0 whitespace-nowrap">
+                    <button disabled className={`px-3 md:px-0 md:w-full py-1.5 md:py-2.5 rounded-lg md:rounded-xl font-semibold text-[10px] md:text-sm mt-1 md:mt-0 whitespace-nowrap ${isDarkMode ? "bg-slate-700 text-slate-400" : "bg-slate-200 text-slate-500"}`}>
                       Coming Soon
                     </button>
                   </div>
@@ -371,17 +411,17 @@ export default function Home() {
             </div>
 
             <div className="absolute inset-0 flex flex-col items-center justify-center z-10 p-4">
-              <div className="bg-white/80 backdrop-blur-xl p-8 rounded-[2rem] shadow-2xl border border-white/50 text-center max-w-md transform transition-all hover:scale-105 duration-500">
+              <div className={`backdrop-blur-xl p-8 rounded-[2rem] shadow-2xl border text-center max-w-md transform transition-all hover:scale-105 duration-500 ${isDarkMode ? "bg-slate-900/80 border-slate-700" : "bg-white/80 border-white/50"}`}>
                 <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary font-bold text-[10px] tracking-widest uppercase mb-4 shadow-sm">
                   <span className="animate-pulse h-1.5 w-1.5 rounded-full bg-primary"></span>
                   Coming Soon
                 </span>
 
-                <h3 className="text-2xl font-display font-bold text-slate-900 mb-3">
+                <h3 className={`text-2xl font-display font-bold mb-3 ${isDarkMode ? "text-white" : "text-slate-900"}`}>
                   Premium Subscriptions
                 </h3>
 
-                <p className="text-slate-600 mb-6 text-sm leading-relaxed px-4">
+                <p className={`mb-6 text-sm leading-relaxed px-4 ${isDarkMode ? "text-slate-300" : "text-slate-600"}`}>
                   We are preparing a fully customizable, chef-curated subscription experience.
                 </p>
 
@@ -397,11 +437,11 @@ export default function Home() {
       </section>
 
       {/* Offers Section */}
-      <section className="py-16 bg-white">
+      <section className={`py-16 ${isDarkMode ? "bg-slate-900" : "bg-white"}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold font-display text-slate-900">Special Offers</h2>
-            <p className="text-slate-500 mt-1">Grab these exclusive deals today</p>
+            <h2 className={`text-3xl font-bold font-display ${isDarkMode ? "text-white" : "text-slate-900"}`}>Special Offers</h2>
+            <p className={`mt-1 ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>Grab these exclusive deals today</p>
           </div>
 
           <div className="flex flex-wrap justify-center gap-4">
@@ -426,7 +466,7 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-24 bg-secondary border-y border-stone-100">
+      <section className={`py-24 border-y ${isDarkMode ? "bg-slate-950 border-slate-800" : "bg-secondary border-stone-100"}`}>
         <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-3 gap-8">
             {[
@@ -440,13 +480,13 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className="p-8 rounded-2xl bg-white border border-slate-200 hover:shadow-lg transition-all text-center group"
+                className={`p-8 rounded-2xl border transition-all text-center group ${isDarkMode ? "bg-slate-900 border-slate-700 hover:shadow-[0_0_15px_rgba(255,255,255,0.05)]" : "bg-white border-slate-200 hover:shadow-lg"}`}
               >
                 <div className="w-16 h-16 mx-auto bg-primary/10 rounded-full flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                   <feature.icon className="w-8 h-8 text-primary group-hover:text-white transition-colors" />
                 </div>
-                <h3 className="text-xl font-bold font-display mb-3 text-slate-900">{feature.title}</h3>
-                <p className="text-slate-500">{feature.desc}</p>
+                <h3 className={`text-xl font-bold font-display mb-3 ${isDarkMode ? "text-white" : "text-slate-900"}`}>{feature.title}</h3>
+                <p className={isDarkMode ? "text-slate-400" : "text-slate-500"}>{feature.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -454,7 +494,7 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-20 bg-white">
+      <section className={`py-20 ${isDarkMode ? "bg-slate-900" : "bg-white"}`}>
         <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
@@ -464,8 +504,8 @@ export default function Home() {
               { label: "Avg Delivery", value: "30min" }
             ].map((stat, idx) => (
               <div key={idx} className="text-center space-y-2 group">
-                <div className="text-4xl md:text-5xl font-bold text-slate-900 font-display group-hover:text-primary transition-colors">{stat.value}</div>
-                <div className="text-xs md:text-sm text-slate-500 font-bold uppercase tracking-widest">{stat.label}</div>
+                <div className={`text-4xl md:text-5xl font-bold font-display group-hover:text-primary transition-colors ${isDarkMode ? "text-white" : "text-slate-900"}`}>{stat.value}</div>
+                <div className={`text-xs md:text-sm font-bold uppercase tracking-widest ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>{stat.label}</div>
               </div>
             ))}
           </div>
@@ -473,34 +513,56 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-24 bg-secondary relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+      <section className={`py-24 relative overflow-hidden ${isDarkMode ? "bg-slate-950" : "bg-slate-50"}`}>
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+
+        {/* Blob Backgrounds for visual flair */}
+        <div className="absolute top-20 right-10 w-[400px] h-[400px] bg-primary/5 rounded-full blur-3xl mix-blend-multiply pointer-events-none" />
+        <div className="absolute bottom-10 left-10 w-[300px] h-[300px] bg-orange-400/5 rounded-full blur-3xl mix-blend-multiply pointer-events-none" />
+
         <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <h2 className="text-4xl font-bold font-display text-center mb-16 text-slate-900">Customer Love</h2>
+          <div className="text-center mb-16">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary font-bold text-sm tracking-widest uppercase mb-4">
+              Testimonials
+            </span>
+            <h2 className={`text-4xl md:text-5xl font-bold font-display mb-4 ${isDarkMode ? "text-white" : "text-slate-900"}`}>Loved by Thousands</h2>
+            <p className={`max-w-2xl mx-auto text-lg ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>Don't just take our word for it. Here's what our foodies have to say.</p>
+          </div>
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { name: "Priya S.", role: "Loyal Customer", review: "AuraBite has transformed my meal prep routine! Fresh, delicious, and delivered on time every single day." },
-              { name: "Rahul M.", role: "Food Enthusiast", review: "The subscription plan is worth every rupee. Quality ingredients and amazing variety in the menu." },
-              { name: "Ananya K.", role: "Working Professional", review: "Best decision I made this year. No more skipping meals or ordering junk food!" }
+              { name: "Priya S.", role: "Loyal Customer", review: "AuraBite has transformed my meal prep routine! Fresh, delicious, and delivered on time every single day. The quality is unmatched.", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80" },
+              { name: "Rahul M.", role: "Food Enthusiast", review: "The subscription plan is worth every rupee. Quality ingredients and amazing variety in the menu. I look forward to lunch every day!", img: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=150&q=80" },
+              { name: "Ananya K.", role: "Working Professional", review: "Best decision I made this year. No more skipping meals or ordering junk food! The packaging is also highly premium and eco-friendly.", img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=150&q=80" }
             ].map((testimonial, i) => (
-              <div key={i} className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm relative">
-                <Quote className="absolute top-6 right-6 w-8 h-8 text-primary/20" />
-                <div className="flex text-primary mb-4">
-                  {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-current" />)}
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.15 }}
+                className={`p-8 rounded-3xl border shadow-xl shadow-slate-200/40 relative group hover:-translate-y-2 transition-transform duration-300 ${isDarkMode ? "bg-slate-900 border-slate-700" : "bg-white border-slate-100"}`}
+              >
+                <div className="absolute -top-5 right-8 w-10 h-10 bg-primary rounded-full flex items-center justify-center shadow-lg shadow-primary/30 transform group-hover:scale-110 transition-transform">
+                  <Quote className="w-5 h-5 text-white" />
                 </div>
-                <p className="text-slate-600 mb-6 italic">
+
+                <div className="flex text-yellow-400 mb-6 gap-1">
+                  {[...Array(5)].map((_, j) => <Star key={j} className="w-5 h-5 fill-current drop-shadow-sm" />)}
+                </div>
+
+                <p className={`mb-8 italic text-lg leading-relaxed font-light ${isDarkMode ? "text-slate-300" : "text-slate-700"}`}>
                   "{testimonial.review}"
                 </p>
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center font-bold text-primary">
-                    {testimonial.name.charAt(0)}
-                  </div>
+
+                <div className={`flex items-center gap-4 mt-auto border-t pt-6 ${isDarkMode ? "border-slate-800" : "border-slate-50"}`}>
+                  <img src={testimonial.img} alt={testimonial.name} className="w-14 h-14 rounded-full object-cover ring-4 ring-primary/10" />
                   <div>
-                    <h4 className="font-bold text-sm text-slate-900">{testimonial.name}</h4>
-                    <p className="text-xs text-slate-500">{testimonial.role}</p>
+                    <h4 className={`font-bold text-base group-hover:text-primary transition-colors ${isDarkMode ? "text-white" : "text-slate-900"}`}>{testimonial.name}</h4>
+                    <p className={`text-sm font-medium ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>{testimonial.role}</p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>

@@ -36,7 +36,7 @@ export function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 glass-nav shadow-sm">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-black/20 hover:bg-black/40 backdrop-blur-xl border-b border-white/10 shadow-lg text-white transition-all duration-500">
         {/* Survey Announcement Banner */}
         <div className="bg-gradient-to-r from-green-950 via-primary to-green-950 text-white px-2 py-1.5 sm:px-4 sm:py-2 text-center text-[10px] sm:text-sm font-medium flex items-center justify-center gap-1.5 sm:gap-2">
           <span className="hidden sm:inline">✨ Help us shape the future of AuraBite!</span>
@@ -54,10 +54,10 @@ export function Navbar() {
               onClick={() => setIsLocationModalOpen(true)}
               className="hidden md:flex items-center gap-2 text-left hover:bg-slate-50 p-2 rounded-xl transition-colors"
             >
-              <MapPin className="w-5 h-5 text-primary" />
+              <MapPin className="w-5 h-5 text-green-400 group-hover:text-green-300 transition-colors" />
               <div>
-                <div className="text-xs text-slate-500">Deliver to</div>
-                <div className="flex items-center gap-1 text-sm font-bold text-slate-900">
+                <div className="text-xs text-white/70">Deliver to</div>
+                <div className="flex items-center gap-1 text-sm font-bold text-white group-hover:text-green-50 transition-colors">
                   {location ? (
                     <span className="max-w-[150px] truncate">{location}</span>
                   ) : (
@@ -70,9 +70,9 @@ export function Navbar() {
 
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2 group cursor-pointer">
-              <img src="/logo.png" alt="AuraBite" className="w-[60px] h-[60px] object-contain" />
-              <span className="text-2xl font-bold font-display tracking-tight text-slate-900">
-                Aura<span className="text-primary">Bite</span>
+              <img src="/logo.png" alt="AuraBite" className="w-[50px] h-[50px] md:w-[60px] md:h-[60px] object-contain drop-shadow-lg" />
+              <span className="text-2xl font-bold font-display tracking-tight text-white drop-shadow-md">
+                Aura<span className="text-green-400">Bite</span>
               </span>
             </Link>
 
@@ -82,7 +82,7 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`text-sm font-bold transition-colors hover:text-primary ${routerLocation === link.href ? "text-primary" : "text-slate-900"
+                  className={`text-sm font-bold transition-all duration-300 hover:text-green-400 hover:-translate-y-0.5 ${routerLocation === link.href ? "text-green-400 drop-shadow-md" : "text-white/90 drop-shadow-sm"
                     }`}
                 >
                   {link.label}
@@ -124,7 +124,7 @@ export function Navbar() {
                 </>
               )}
 
-              <button onClick={() => { window.location.href = '/#plans'; }} className="hidden md:flex items-center gap-2 px-6 py-2.5 bg-primary text-white rounded-full font-bold text-sm shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all active:scale-95 cursor-pointer">
+              <button onClick={() => { window.location.href = '/#plans'; }} className="hidden md:flex items-center gap-2 px-6 py-2.5 bg-green-500 text-white rounded-full font-bold text-sm shadow-[0_0_20px_rgba(34,197,94,0.3)] hover:shadow-[0_0_25px_rgba(34,197,94,0.5)] hover:-translate-y-0.5 transition-all active:scale-95 cursor-pointer border border-green-400/50">
                 Order Now
               </button>
 
