@@ -19,10 +19,10 @@ export default function Contact() {
   const isPending = false;
 
   return (
-    <div className="min-h-screen pt-32 pb-16 px-4 bg-white">
+    <div className="min-h-screen pt-32 pb-16 px-4 bg-white dark:bg-black transition-colors duration-500">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold font-display text-center mb-4 text-slate-900">Get in Touch</h1>
-        <p className="text-slate-500 text-center mb-16 max-w-xl mx-auto">
+        <h1 className="text-4xl font-bold font-display text-center mb-4 text-slate-900 dark:text-white">Get in Touch</h1>
+        <p className="text-slate-500 dark:text-slate-400 text-center mb-16 max-w-xl mx-auto">
           Have questions about our meal plans or need help with your order? We're here to help!
         </p>
 
@@ -30,16 +30,16 @@ export default function Contact() {
 
           {/* Info Side */}
           <div className="space-y-8">
-            <div className="bg-secondary p-8 rounded-2xl border border-slate-200 space-y-6">
-              <h3 className="text-2xl font-bold font-display mb-4 text-slate-900">Contact Info</h3>
+            <div className="bg-secondary dark:bg-zinc-950 p-8 rounded-2xl border border-slate-200 dark:border-zinc-800 space-y-6 transition-colors">
+              <h3 className="text-2xl font-bold font-display mb-4 text-slate-900 dark:text-white">Contact Info</h3>
               <ul className="space-y-6">
                 <li className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
                     <Phone className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-slate-900">Call Us</h4>
-                    <p className="text-slate-600">+91 7277775111</p>
+                    <h4 className="font-bold text-slate-900 dark:text-white">Call Us</h4>
+                    <p className="text-slate-600 dark:text-slate-400">+91 7277775111</p>
                   </div>
                 </li>
                 <li className="flex items-center gap-4">
@@ -47,8 +47,8 @@ export default function Contact() {
                     <Mail className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-slate-900">Email Us</h4>
-                    <p className="text-slate-600">info@aurabiteofficial.com</p>
+                    <h4 className="font-bold text-slate-900 dark:text-white">Email Us</h4>
+                    <p className="text-slate-600 dark:text-slate-400">info@aurabiteofficial.com</p>
                   </div>
                 </li>
               </ul>
@@ -63,9 +63,9 @@ export default function Contact() {
             </a>
 
             {/* Delivery Info */}
-            <div className="bg-gradient-to-br from-primary/5 to-emerald-50 p-8 rounded-2xl border border-primary/10">
-              <h4 className="text-xl font-bold font-display mb-4 text-slate-900">Delivery Hours</h4>
-              <div className="space-y-3 text-slate-700">
+            <div className="bg-gradient-to-br from-primary/5 to-emerald-50 dark:from-zinc-950 dark:to-zinc-900 p-8 rounded-2xl border border-primary/10 dark:border-zinc-800 transition-colors">
+              <h4 className="text-xl font-bold font-display mb-4 text-slate-900 dark:text-white">Delivery Hours</h4>
+              <div className="space-y-3 text-slate-700 dark:text-slate-300">
                 <p className="flex justify-between">
                   <span className="font-medium">Breakfast</span>
                   <span>7:00 AM - 10:00 AM</span>
@@ -83,35 +83,35 @@ export default function Contact() {
           </div>
 
           {/* Form Side */}
-          <div className="bg-secondary p-8 rounded-2xl border border-slate-200">
-            <h3 className="text-2xl font-bold font-display mb-6 text-slate-900">Send a Message</h3>
+          <div className="bg-secondary dark:bg-zinc-950 p-8 rounded-2xl border border-slate-200 dark:border-zinc-800 transition-colors">
+            <h3 className="text-2xl font-bold font-display mb-6 text-slate-900 dark:text-white">Send a Message</h3>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">Name</label>
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Name</label>
                 <input
                   {...form.register("name")}
-                  className="w-full bg-white rounded-lg px-4 py-3 border border-slate-200 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary text-slate-900"
+                  className="w-full bg-white dark:bg-zinc-900 rounded-lg px-4 py-3 border border-slate-200 dark:border-zinc-800 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500"
                   placeholder="Your Name"
                 />
                 {form.formState.errors.name && <p className="text-red-500 text-xs">{form.formState.errors.name.message}</p>}
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">Email</label>
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Email</label>
                 <input
                   {...form.register("email")}
                   type="email"
-                  className="w-full bg-white rounded-lg px-4 py-3 border border-slate-200 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary text-slate-900"
+                  className="w-full bg-white dark:bg-zinc-900 rounded-lg px-4 py-3 border border-slate-200 dark:border-zinc-800 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500"
                   placeholder="your@email.com"
                 />
                 {form.formState.errors.email && <p className="text-red-500 text-xs">{form.formState.errors.email.message}</p>}
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">Message</label>
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Message</label>
                 <textarea
                   {...form.register("message")}
-                  className="w-full bg-white rounded-lg px-4 py-3 border border-slate-200 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary min-h-[150px] text-slate-900"
+                  className="w-full bg-white dark:bg-zinc-900 rounded-lg px-4 py-3 border border-slate-200 dark:border-zinc-800 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary min-h-[150px] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500"
                   placeholder="How can we help you?"
                 />
                 {form.formState.errors.message && <p className="text-red-500 text-xs">{form.formState.errors.message.message}</p>}
