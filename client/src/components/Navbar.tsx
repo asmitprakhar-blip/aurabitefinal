@@ -146,7 +146,7 @@ export function Navbar() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden bg-white border-b border-slate-100 overflow-hidden"
+              className="md:hidden bg-white dark:bg-zinc-950 border-b border-slate-100 dark:border-zinc-800 overflow-hidden"
             >
               <div className="px-4 py-4 space-y-2">
                 {/* Mobile Location */}
@@ -155,12 +155,12 @@ export function Navbar() {
                     setIsLocationModalOpen(true);
                     setIsOpen(false);
                   }}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/5 text-left"
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/5 dark:bg-primary/10 text-left"
                 >
                   <MapPin className="w-5 h-5 text-primary" />
                   <div>
-                    <div className="text-xs text-slate-500">Deliver to</div>
-                    <div className="text-sm font-bold text-slate-900">
+                    <div className="text-xs text-slate-500 dark:text-slate-400">Deliver to</div>
+                    <div className="text-sm font-bold text-slate-900 dark:text-white">
                       {location || "Select location"}
                     </div>
                   </div>
@@ -172,7 +172,7 @@ export function Navbar() {
                     href={link.href}
                     className={`block px-4 py-3 rounded-xl text-base font-medium transition-colors ${routerLocation === link.href
                       ? "bg-primary/10 text-primary"
-                      : "text-slate-700 hover:bg-slate-50"
+                      : "text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-zinc-900"
                       }`}
                     onClick={() => setIsOpen(false)}
                   >
@@ -181,16 +181,16 @@ export function Navbar() {
                 ))}
 
                 {!isLoading && (
-                  <div className="pt-2 border-t border-slate-100 mt-2">
+                  <div className="pt-2 border-t border-slate-100 dark:border-zinc-800 mt-2">
                     {isAuthenticated ? (
                       <button
                         onClick={handleLogout}
-                        className="w-full text-left px-4 py-3 rounded-xl text-red-600 font-medium"
+                        className="w-full text-left px-4 py-3 rounded-xl text-red-600 dark:text-red-400 font-medium"
                       >
                         Sign Out
                       </button>
                     ) : (
-                      <button className="block w-full text-left px-4 py-3 rounded-xl bg-slate-900 text-white text-center font-bold cursor-pointer" onClick={() => { setIsOpen(false); setIsSignModalOpen(true); }}>
+                      <button className="block w-full text-left px-4 py-3 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-center font-bold cursor-pointer" onClick={() => { setIsOpen(false); setIsSignModalOpen(true); }}>
                         Sign In
                       </button>
                     )}
@@ -210,21 +210,21 @@ export function Navbar() {
 
       {isSignModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4">
-          <div className="bg-white rounded-2xl p-8 max-w-sm w-full text-center relative pointer-events-auto">
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl p-8 max-w-sm w-full text-center relative pointer-events-auto shadow-2xl">
             <button
               onClick={() => setIsSignModalOpen(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
             >
               <X className="w-5 h-5" />
             </button>
             <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <User className="w-8 h-8 text-primary" />
             </div>
-            <h3 className="text-2xl font-bold text-slate-900 mb-2">Coming Soon</h3>
-            <p className="text-slate-500 mb-6">User accounts and authentication are currently being upgraded. Please check back later!</p>
+            <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Coming Soon</h3>
+            <p className="text-slate-500 dark:text-slate-400 mb-6">User accounts and authentication are currently being upgraded. Please check back later!</p>
             <button
               onClick={() => setIsSignModalOpen(false)}
-              className="w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-slate-800 transition-colors"
+              className="w-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 py-3 rounded-xl font-bold hover:bg-slate-800 dark:hover:bg-slate-200 transition-colors"
             >
               Close
             </button>

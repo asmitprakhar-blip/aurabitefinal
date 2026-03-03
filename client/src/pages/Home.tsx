@@ -5,6 +5,7 @@ import { motion, useScroll, useSpring, useTransform, AnimatePresence } from "fra
 import { useMenu } from "@/hooks/use-menu";
 import { MenuCard } from "@/components/MenuCard";
 import { HeroSequence } from "@/components/HeroSequence";
+import { useTheme } from "@/hooks/use-theme";
 
 const subscriptionPlans = [
   {
@@ -84,7 +85,8 @@ export default function Home() {
   const { data: menuItems } = useMenu();
   const featuredItems = menuItems?.filter(item => item.popular).slice(0, 3) || [];
 
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const isDarkMode = theme === "dark";
 
   // Scrollytelling Refs
   const containerRef = useRef<HTMLDivElement>(null);
@@ -101,13 +103,13 @@ export default function Home() {
   });
 
   return (
-    <div className={`flex flex-col min-h-screen transition-colors duration-500 ${isDarkMode ? "bg-slate-950 text-slate-50" : "bg-white text-slate-900"}`}>
+    <div className="flex flex-col min-h-screen transition-colors duration-500 bg-background text-foreground">
       <LiveOrderNotification />
 
       {/* Theme Toggle */}
       <div className="fixed bottom-6 left-6 z-50">
         <button
-          onClick={() => setIsDarkMode(!isDarkMode)}
+          onClick={() => setTheme(isDarkMode ? "light" : "dark")}
           className={`p-3 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110 active:scale-95 ${isDarkMode
             ? "bg-slate-800 text-yellow-400 hover:bg-slate-700 hover:shadow-yellow-400/20"
             : "bg-white text-slate-800 hover:bg-slate-50 border border-slate-200"
@@ -247,7 +249,7 @@ export default function Home() {
       </div>
 
       {/* Quick Categories & Stories Section */}
-      <section className={`py-12 relative z-20 rounded-b-3xl shadow-sm transition-colors duration-500 ${isDarkMode ? "bg-slate-900" : "bg-white"}`}>
+      <section className="py-12 relative z-20 rounded-b-3xl shadow-sm transition-colors duration-500 bg-white dark:bg-black">
         <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Story Highlights */}
@@ -278,17 +280,17 @@ export default function Home() {
             </div>
           </div>
 
-          <h3 className={`text-xl font-bold font-display mb-6 px-2 flex items-center gap-2 ${isDarkMode ? "text-white" : "text-slate-900"}`}>
+          <h3 className="text-xl font-bold font-display mb-6 px-2 flex items-center gap-2 text-slate-900 dark:text-white">
             <Zap className="w-5 h-5 text-yellow-500 fill-yellow-500" /> Quick Cravings
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {categories.map((cat) => (
-              <div key={cat.id} className={`group cursor-pointer border hover:border-primary/50 hover:shadow-lg transition-all p-4 rounded-xl flex items-center gap-4 ${isDarkMode ? "bg-slate-800 border-slate-700 hover:bg-slate-700" : "bg-slate-50 border-slate-100 hover:bg-white"}`}>
+              <div key={cat.id} className="group cursor-pointer border hover:border-primary/50 hover:shadow-lg transition-all p-4 rounded-xl flex items-center gap-4 bg-slate-50 dark:bg-zinc-950 border-slate-100 dark:border-zinc-800 hover:bg-white dark:hover:bg-zinc-900">
                 <div className={`w-12 h-12 rounded-full ${cat.color} flex items-center justify-center text-2xl shadow-sm group-hover:scale-110 transition-transform`}>
                   {cat.icon}
                 </div>
                 <div>
-                  <div className={`font-bold transition-colors group-hover:text-primary ${isDarkMode ? "text-white" : "text-slate-800"}`}>{cat.name}</div>
+                  <div className="font-bold transition-colors group-hover:text-primary text-slate-800 dark:text-white">{cat.name}</div>
                   <div className="text-xs text-slate-400 font-medium whitespace-nowrap">Order Now</div>
                 </div>
                 <ArrowRight className="w-4 h-4 text-slate-300 ml-auto group-hover:text-primary transition-colors" />
@@ -299,15 +301,15 @@ export default function Home() {
       </section>
 
       {/* Bestsellers You'll Love */}
-      <section className={`py-24 relative overflow-hidden transition-colors duration-500 ${isDarkMode ? "bg-slate-950" : "bg-white"}`}>
+      <section className="py-24 relative overflow-hidden transition-colors duration-500 bg-white dark:bg-black">
         {/* Background Decorative Elements */}
         <div className="absolute top-20 left-10 opacity-5 animate-pulse"><Leaf className="w-32 h-32 rotate-45" /></div>
         <div className="absolute bottom-20 right-10 opacity-5 animate-bounce duration-[3000ms]"><Flame className="w-24 h-24 text-orange-500" /></div>
 
         <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-10 md:mb-16">
-            <h2 className={`text-3xl md:text-4xl font-bold font-display mb-4 ${isDarkMode ? "text-white" : "text-slate-900"}`}>Bestsellers You'll Love</h2>
-            <p className={`max-w-2xl mx-auto ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>
+            <h2 className="text-3xl md:text-4xl font-bold font-display mb-4 text-slate-900 dark:text-white">Bestsellers You'll Love</h2>
+            <p className="max-w-2xl mx-auto text-slate-500 dark:text-slate-400">
               Discover our most loved dishes, crafted with passion and delivered with care.
             </p>
           </div>
@@ -329,18 +331,18 @@ export default function Home() {
       </section>
 
       {/* Aesthetic Survey Section */}
-      <section className={`py-20 relative overflow-hidden ${isDarkMode ? "bg-slate-900" : "bg-slate-50"}`}>
+      <section className="py-20 relative overflow-hidden bg-slate-50 dark:bg-zinc-950">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[800px] md:h-[800px] bg-primary/10 rounded-full blur-3xl saturate-150 animate-pulse pointer-events-none"></div>
         <div className="absolute top-0 right-0 w-64 h-64 bg-orange-400/10 rounded-full blur-3xl pointer-events-none"></div>
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-yellow-400/10 rounded-full blur-3xl pointer-events-none"></div>
 
         <div className="container max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className={`backdrop-blur-2xl border p-8 md:p-14 rounded-[2.5rem] shadow-2xl shadow-primary/5 text-center flex flex-col items-center transform hover:-translate-y-1 transition-transform duration-500 ${isDarkMode ? "bg-slate-800/80 border-slate-700" : "bg-white/70 border-white"}`}>
+          <div className="backdrop-blur-2xl border p-8 md:p-14 rounded-[2.5rem] shadow-2xl shadow-primary/5 text-center flex flex-col items-center transform hover:-translate-y-1 transition-transform duration-500 bg-white/70 dark:bg-black/60 border-white dark:border-white/10">
             <span className="text-4xl mb-4 bg-primary/10 p-4 rounded-full">✨</span>
-            <h2 className={`text-3xl md:text-5xl font-display font-bold mb-4 leading-tight ${isDarkMode ? "text-white" : "text-slate-900"}`}>
+            <h2 className="text-3xl md:text-5xl font-display font-bold mb-4 leading-tight text-slate-900 dark:text-white">
               Help Us Create The <br /><span className="text-primary italic">Perfect Menu</span>
             </h2>
-            <p className={`max-w-xl mx-auto mb-8 md:text-lg ${isDarkMode ? "text-slate-300" : "text-slate-600"}`}>
+            <p className="max-w-xl mx-auto mb-8 md:text-lg text-slate-600 dark:text-slate-300">
               We are constantly evolving to serve you better. Take our 1-minute survey and help shape the future of AuraBite. Your feedback is our secret ingredient!
             </p>
             <a href="https://forms.gle/ecSNRegkMPqJrfZNA" target="_blank" rel="noopener noreferrer">
@@ -353,12 +355,12 @@ export default function Home() {
       </section>
 
       {/* Subscription Plans */}
-      <section id="plans" className={`py-16 border-y ${isDarkMode ? "bg-slate-950 border-slate-800" : "bg-secondary border-stone-100"}`}>
+      <section id="plans" className="py-16 border-y bg-secondary dark:bg-black border-stone-100 dark:border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className={`text-3xl font-bold font-display ${isDarkMode ? "text-white" : "text-slate-900"}`}>Subscription Plans</h2>
-              <p className={`mt-1 ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>Monthly meal plans tailored for you</p>
+              <h2 className="text-3xl font-bold font-display text-slate-900 dark:text-white">Subscription Plans</h2>
+              <p className="mt-1 text-slate-500 dark:text-slate-400">Monthly meal plans tailored for you</p>
             </div>
             <Link href="/subscriptions">
               <button className="text-primary font-bold text-sm flex items-center gap-1 hover:underline">
@@ -372,7 +374,7 @@ export default function Home() {
               {subscriptionPlans.map((plan) => (
                 <div
                   key={plan.id}
-                  className={`rounded-xl md:rounded-2xl p-4 md:p-6 border transition-all relative flex flex-row md:flex-col justify-between items-center md:items-start ${isDarkMode ? "bg-slate-800 border-slate-700" : "bg-white border-slate-200"}`}
+                  className="rounded-xl md:rounded-2xl p-4 md:p-6 border transition-all relative flex flex-row md:flex-col justify-between items-center md:items-start bg-white dark:bg-zinc-950 border-slate-200 dark:border-zinc-800"
                 >
                   {plan.popular && (
                     <div className="absolute top-0 right-0 md:-top-3 md:left-1/2 md:-translate-x-1/2 md:right-auto bg-primary/50 text-white text-[9px] md:text-xs font-bold px-2 py-1 md:px-3 md:py-1 rounded-bl-lg md:rounded-bl-none md:rounded-full">
@@ -381,16 +383,16 @@ export default function Home() {
                   )}
 
                   <div className="flex flex-col flex-1">
-                    <h4 className={`font-bold mb-1 text-sm md:text-lg ${isDarkMode ? "text-white" : "text-slate-900"}`}>{plan.name}</h4>
+                    <h4 className="font-bold mb-1 text-sm md:text-lg text-slate-900 dark:text-white">{plan.name}</h4>
                     <div className="hidden md:flex items-baseline gap-1 mb-3 opacity-50">
                       <span className="text-2xl font-bold text-primary">₹{plan.price.toLocaleString()}</span>
-                      <span className={`text-sm ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>/{plan.period}</span>
+                      <span className="text-sm text-slate-500 dark:text-slate-400">/{plan.period}</span>
                     </div>
                     <div className="flex flex-wrap gap-1 md:gap-2 mb-0 md:mb-4 opacity-75 mt-0.5">
                       {plan.meals.map((meal) => (
                         <span
                           key={meal}
-                          className={`px-1.5 py-0.5 md:px-2 md:py-1 rounded text-[9px] md:text-xs font-medium ${isDarkMode ? "bg-slate-700 text-slate-300" : "bg-slate-100 text-slate-600"}`}
+                          className="px-1.5 py-0.5 md:px-2 md:py-1 rounded text-[9px] md:text-xs font-medium bg-slate-100 dark:bg-zinc-900 text-slate-600 dark:text-slate-400"
                         >
                           {meal}
                         </span>
@@ -402,7 +404,7 @@ export default function Home() {
                     <div className="flex md:hidden items-baseline gap-1 opacity-50">
                       <span className="text-base font-bold text-primary">₹{plan.price.toLocaleString()}</span>
                     </div>
-                    <button disabled className={`px-3 md:px-0 md:w-full py-1.5 md:py-2.5 rounded-lg md:rounded-xl font-semibold text-[10px] md:text-sm mt-1 md:mt-0 whitespace-nowrap ${isDarkMode ? "bg-slate-700 text-slate-400" : "bg-slate-200 text-slate-500"}`}>
+                    <button disabled className="px-3 md:px-0 md:w-full py-1.5 md:py-2.5 rounded-lg md:rounded-xl font-semibold text-[10px] md:text-sm mt-1 md:mt-0 whitespace-nowrap bg-slate-200 dark:bg-zinc-800 text-slate-500 dark:text-slate-400">
                       Coming Soon
                     </button>
                   </div>
@@ -411,17 +413,17 @@ export default function Home() {
             </div>
 
             <div className="absolute inset-0 flex flex-col items-center justify-center z-10 p-4">
-              <div className={`backdrop-blur-xl p-8 rounded-[2rem] shadow-2xl border text-center max-w-md transform transition-all hover:scale-105 duration-500 ${isDarkMode ? "bg-slate-900/80 border-slate-700" : "bg-white/80 border-white/50"}`}>
+              <div className="backdrop-blur-xl p-8 rounded-[2rem] shadow-2xl border text-center max-w-md transform transition-all hover:scale-105 duration-500 bg-white/80 dark:bg-black/80 border-white/50 dark:border-white/10">
                 <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary font-bold text-[10px] tracking-widest uppercase mb-4 shadow-sm">
                   <span className="animate-pulse h-1.5 w-1.5 rounded-full bg-primary"></span>
                   Coming Soon
                 </span>
 
-                <h3 className={`text-2xl font-display font-bold mb-3 ${isDarkMode ? "text-white" : "text-slate-900"}`}>
+                <h3 className="text-2xl font-display font-bold mb-3 text-slate-900 dark:text-white">
                   Premium Subscriptions
                 </h3>
 
-                <p className={`mb-6 text-sm leading-relaxed px-4 ${isDarkMode ? "text-slate-300" : "text-slate-600"}`}>
+                <p className="mb-6 text-sm leading-relaxed px-4 text-slate-600 dark:text-slate-400">
                   We are preparing a fully customizable, chef-curated subscription experience.
                 </p>
 
@@ -437,11 +439,11 @@ export default function Home() {
       </section>
 
       {/* Offers Section */}
-      <section className={`py-16 ${isDarkMode ? "bg-slate-900" : "bg-white"}`}>
+      <section className="py-16 bg-white dark:bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
-            <h2 className={`text-3xl font-bold font-display ${isDarkMode ? "text-white" : "text-slate-900"}`}>Special Offers</h2>
-            <p className={`mt-1 ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>Grab these exclusive deals today</p>
+            <h2 className="text-3xl font-bold font-display text-slate-900 dark:text-white">Special Offers</h2>
+            <p className="mt-1 text-slate-500 dark:text-slate-400">Grab these exclusive deals today</p>
           </div>
 
           <div className="flex flex-wrap justify-center gap-4">
@@ -466,7 +468,7 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className={`py-24 border-y ${isDarkMode ? "bg-slate-950 border-slate-800" : "bg-secondary border-stone-100"}`}>
+      <section className="py-24 border-y bg-secondary dark:bg-black border-stone-100 dark:border-white/5">
         <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-3 gap-8">
             {[
@@ -480,13 +482,13 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className={`p-8 rounded-2xl border transition-all text-center group ${isDarkMode ? "bg-slate-900 border-slate-700 hover:shadow-[0_0_15px_rgba(255,255,255,0.05)]" : "bg-white border-slate-200 hover:shadow-lg"}`}
+                className="p-8 rounded-2xl border transition-all text-center group bg-white dark:bg-zinc-950 border-slate-200 dark:border-zinc-800 hover:shadow-lg dark:hover:shadow-[0_0_15px_rgba(255,255,255,0.05)]"
               >
                 <div className="w-16 h-16 mx-auto bg-primary/10 rounded-full flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                   <feature.icon className="w-8 h-8 text-primary group-hover:text-white transition-colors" />
                 </div>
-                <h3 className={`text-xl font-bold font-display mb-3 ${isDarkMode ? "text-white" : "text-slate-900"}`}>{feature.title}</h3>
-                <p className={isDarkMode ? "text-slate-400" : "text-slate-500"}>{feature.desc}</p>
+                <h3 className="text-xl font-bold font-display mb-3 text-slate-900 dark:text-white">{feature.title}</h3>
+                <p className="text-slate-500 dark:text-slate-400">{feature.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -494,7 +496,7 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className={`py-20 ${isDarkMode ? "bg-slate-900" : "bg-white"}`}>
+      <section className="py-20 bg-white dark:bg-black">
         <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
@@ -504,8 +506,8 @@ export default function Home() {
               { label: "Avg Delivery", value: "30min" }
             ].map((stat, idx) => (
               <div key={idx} className="text-center space-y-2 group">
-                <div className={`text-4xl md:text-5xl font-bold font-display group-hover:text-primary transition-colors ${isDarkMode ? "text-white" : "text-slate-900"}`}>{stat.value}</div>
-                <div className={`text-xs md:text-sm font-bold uppercase tracking-widest ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>{stat.label}</div>
+                <div className="text-4xl md:text-5xl font-bold font-display group-hover:text-primary transition-colors text-slate-900 dark:text-white">{stat.value}</div>
+                <div className="text-xs md:text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -513,7 +515,7 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <section className={`py-24 relative overflow-hidden ${isDarkMode ? "bg-slate-950" : "bg-slate-50"}`}>
+      <section className="py-24 relative overflow-hidden bg-slate-50 dark:bg-black">
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
         {/* Blob Backgrounds for visual flair */}
@@ -525,8 +527,8 @@ export default function Home() {
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary font-bold text-sm tracking-widest uppercase mb-4">
               Testimonials
             </span>
-            <h2 className={`text-4xl md:text-5xl font-bold font-display mb-4 ${isDarkMode ? "text-white" : "text-slate-900"}`}>Loved by Thousands</h2>
-            <p className={`max-w-2xl mx-auto text-lg ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>Don't just take our word for it. Here's what our foodies have to say.</p>
+            <h2 className="text-4xl md:text-5xl font-bold font-display mb-4 text-slate-900 dark:text-white">Loved by Thousands</h2>
+            <p className="max-w-2xl mx-auto text-lg text-slate-500 dark:text-slate-400">Don't just take our word for it. Here's what our foodies have to say.</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -541,7 +543,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.15 }}
-                className={`p-8 rounded-3xl border shadow-xl shadow-slate-200/40 relative group hover:-translate-y-2 transition-transform duration-300 ${isDarkMode ? "bg-slate-900 border-slate-700" : "bg-white border-slate-100"}`}
+                className="p-8 rounded-3xl border shadow-xl shadow-slate-200/40 dark:shadow-none relative group hover:-translate-y-2 transition-transform duration-300 bg-white dark:bg-zinc-950 border-slate-100 dark:border-white/5"
               >
                 <div className="absolute -top-5 right-8 w-10 h-10 bg-primary rounded-full flex items-center justify-center shadow-lg shadow-primary/30 transform group-hover:scale-110 transition-transform">
                   <Quote className="w-5 h-5 text-white" />
@@ -551,15 +553,15 @@ export default function Home() {
                   {[...Array(5)].map((_, j) => <Star key={j} className="w-5 h-5 fill-current drop-shadow-sm" />)}
                 </div>
 
-                <p className={`mb-8 italic text-lg leading-relaxed font-light ${isDarkMode ? "text-slate-300" : "text-slate-700"}`}>
+                <p className="mb-8 italic text-lg leading-relaxed font-light text-slate-700 dark:text-slate-300">
                   "{testimonial.review}"
                 </p>
 
-                <div className={`flex items-center gap-4 mt-auto border-t pt-6 ${isDarkMode ? "border-slate-800" : "border-slate-50"}`}>
+                <div className="flex items-center gap-4 mt-auto border-t pt-6 border-slate-50 dark:border-white/5">
                   <img src={testimonial.img} alt={testimonial.name} className="w-14 h-14 rounded-full object-cover ring-4 ring-primary/10" />
                   <div>
-                    <h4 className={`font-bold text-base group-hover:text-primary transition-colors ${isDarkMode ? "text-white" : "text-slate-900"}`}>{testimonial.name}</h4>
-                    <p className={`text-sm font-medium ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>{testimonial.role}</p>
+                    <h4 className="font-bold text-base group-hover:text-primary transition-colors text-slate-900 dark:text-white">{testimonial.name}</h4>
+                    <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{testimonial.role}</p>
                   </div>
                 </div>
               </motion.div>
