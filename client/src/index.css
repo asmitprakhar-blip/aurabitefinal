@@ -118,6 +118,17 @@
   .animate-marquee {
     animation: marquee 25s linear infinite;
   }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
 }
 
 @keyframes marquee {

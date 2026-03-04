@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { Link } from "wouter";
-import { ArrowRight, Star, Clock, Truck, ShieldCheck, Quote, Tag, Gift, CheckCircle, Zap, Leaf, Flame, Timer, PlayCircle, TrendingUp, Moon, Sun } from "lucide-react";
+import { ArrowRight, Star, Clock, Truck, ShieldCheck, Quote, Tag, Gift, CheckCircle, Zap, Leaf, Flame, Timer, PlayCircle, TrendingUp, Moon, Sun, ShoppingBag } from "lucide-react";
 import { motion, useScroll, useSpring, useTransform, AnimatePresence } from "framer-motion";
 import { useMenu } from "@/hooks/use-menu";
 import { MenuCard } from "@/components/MenuCard";
@@ -78,7 +78,46 @@ const randomOrders = [
 ];
 
 function LiveOrderNotification() {
-  return null;
+  const [currentOrder, setCurrentOrder] = useState<typeof randomOrders[0] | null>(null);
+
+  useEffect(() => {
+    // Show an order shortly after load, then periodically
+    const timeout = setTimeout(() => {
+      const showOrder = () => {
+        const order = randomOrders[Math.floor(Math.random() * randomOrders.length)];
+        setCurrentOrder(order);
+        setTimeout(() => setCurrentOrder(null), 4000); // Hide after 4 seconds
+      };
+
+      showOrder(); // initial show
+      const interval = setInterval(showOrder, 15000); // Every 15 seconds
+      return () => clearInterval(interval);
+    }, 2000); // Wait 2s before first notification
+
+    return () => clearTimeout(timeout);
+  }, []);
+
+  return (
+    <AnimatePresence>
+      {currentOrder && (
+        <motion.div
+          initial={{ opacity: 0, y: 50, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 20, scale: 0.9 }}
+          className="fixed bottom-24 left-4 right-4 md:left-6 md:right-auto md:w-80 z-50 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md p-4 rounded-2xl shadow-2xl border border-slate-100 dark:border-zinc-800 flex items-center gap-4 cursor-pointer"
+        >
+          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0">
+            <ShoppingBag className="w-5 h-5 text-white" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Someone just ordered</p>
+            <p className="text-sm font-bold text-slate-900 dark:text-white truncate">{currentOrder.item}</p>
+            <p className="text-[10px] text-slate-400 mt-0.5">{currentOrder.time} • by {currentOrder.name}</p>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
 }
 
 export default function Home() {
@@ -139,8 +178,8 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Scroll Sequence Wrapper: Height increased to 400vh to slow down the animation significantly */}
-      <div ref={containerRef} className="relative h-[400vh]">
+      {/* Scroll Sequence Wrapper: Height adjusted for better mobile scrolling */}
+      <div ref={containerRef} className="relative h-[250vh] md:h-[400vh]">
 
         {/* Sticky Hero Section: Stays pinned while user scrolls */}
         <section className="sticky top-0 h-[100dvh] flex items-center justify-center overflow-hidden">
@@ -158,7 +197,7 @@ export default function Home() {
               transition={{ duration: 0.8, ease: "easeOut" }}
               className="space-y-6 md:space-y-8 max-w-2xl pt-20 md:pt-0"
             >
-              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-black/40 text-white border border-white/10 backdrop-blur-md shadow-2xl">
+              <div className="inline-flex items-center gap-2 md:gap-3 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-black/40 text-white border border-white/10 backdrop-blur-md shadow-2xl">
                 <span className="relative flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
@@ -166,7 +205,7 @@ export default function Home() {
                 <span className="text-sm font-medium tracking-widest uppercase text-shadow-sm">Now Taking Pre-Orders</span>
               </div>
 
-              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold font-display leading-[1.1] tracking-tight text-white drop-shadow-2xl">
+              <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold font-display leading-[1.1] tracking-tight text-white drop-shadow-2xl mt-4 md:mt-0">
                 The Art of <br />
                 <span className="text-primary font-serif italic font-light">Fine Dining</span> <br />
                 At Home
@@ -285,8 +324,8 @@ export default function Home() {
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {categories.map((cat) => (
-              <div key={cat.id} className="group cursor-pointer border hover:border-primary/50 hover:shadow-lg transition-all p-4 rounded-xl flex items-center gap-4 bg-slate-50 dark:bg-zinc-950 border-slate-100 dark:border-zinc-800 hover:bg-white dark:hover:bg-zinc-900">
-                <div className={`w-12 h-12 rounded-full ${cat.color} flex items-center justify-center text-2xl shadow-sm group-hover:scale-110 transition-transform`}>
+              <div key={cat.id} className="group cursor-pointer border hover:border-primary/50 hover:shadow-lg transition-all p-3 md:p-4 rounded-xl flex items-center gap-3 md:gap-4 bg-slate-50 dark:bg-zinc-950 border-slate-100 dark:border-zinc-800 hover:bg-white dark:hover:bg-zinc-900">
+                <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full ${cat.color} flex items-center justify-center text-xl md:text-2xl shadow-sm group-hover:scale-110 transition-transform`}>
                   {cat.icon}
                 </div>
                 <div>
@@ -446,14 +485,14 @@ export default function Home() {
             <p className="mt-1 text-slate-500 dark:text-slate-400">Grab these exclusive deals today</p>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex overflow-x-auto sm:flex-wrap justify-start sm:justify-center gap-4 pb-4 snap-x snap-mandatory no-scrollbar px-1">
             {offers.map((offer) => (
               <motion.div
                 key={offer.id}
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                className={`${offer.bgColor} text-white rounded-2xl p-6 min-w-[220px] shadow-lg`}
+                className={`${offer.bgColor} text-white rounded-2xl p-6 min-w-[280px] sm:min-w-[220px] shadow-lg snap-center shrink-0`}
               >
                 <Tag className="w-8 h-8 mb-3" />
                 <div className="font-bold text-xl">{offer.title}</div>
